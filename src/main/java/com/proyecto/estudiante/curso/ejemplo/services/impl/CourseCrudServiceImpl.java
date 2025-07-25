@@ -50,7 +50,7 @@ public class CourseCrudServiceImpl implements CrudService<Course> {
     @Override
     public void update(Course course)throws SQLException{
         if((course.getNombre() == null) || (course.getNombre().equals(""))){
-            throw new IllegalArgumentException("El nombre del curso no puede ser nulo ni vacio.");
+            throw new IllegalArgumentException("El nombre del curso es requerido.");
         }
 
         if ((course.getId() == null) || (course.getId() <= 0)){
@@ -59,6 +59,12 @@ public class CourseCrudServiceImpl implements CrudService<Course> {
 
         try (Connection conn = ConnectionBd.getConnection()) {
             courseRepository.setConn(conn);
+            Course existeCurso = courseRepository.getById(course.getId());
+            if(existeCurso == null){
+                throw new IllegalArgumentException("El curso no existe");
+            }
+
+
             courseRepository.update(course);
         }
     }

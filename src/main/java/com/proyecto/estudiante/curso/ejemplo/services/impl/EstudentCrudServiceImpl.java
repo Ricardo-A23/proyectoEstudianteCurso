@@ -48,19 +48,17 @@ public class EstudentCrudServiceImpl implements CrudService<Estudent> {
     @Override
     public void update(Estudent estudent) throws SQLException {
         validacionEstudiante(estudent);
-
-        Estudent estudentVerificar = estudentRepository.getById(estudent.getId());
-        if(estudentVerificar == null){
-            throw new IllegalArgumentException("El estudiante no existe");
-        }
-
         if (estudent.getId() == null || estudent.getId() <= 0) {
-            throw new IllegalArgumentException("El id del estudiante es obligatorio.");
+            throw new IllegalArgumentException("El id del estudiante no puede ser nulo ni menor o igual a cero.");
         }
 
         try (Connection conn = ConnectionBd.getConnection()) {
             estudentRepository.setConn(conn);
+            Estudent estudentVerificar = estudentRepository.getById(estudent.getId());
 
+            if(estudentVerificar == null){
+                throw new IllegalArgumentException("El estudiante no existe");
+            }
             estudentRepository.update(estudent);
         }
     }
@@ -72,7 +70,13 @@ public class EstudentCrudServiceImpl implements CrudService<Estudent> {
         }
         try(Connection conn = ConnectionBd.getConnection()) {
             estudentRepository.setConn(conn);
-            estudentRepository.delete(id);
+
+            Estudent estudentVerificar = estudentRepository.getById(id);
+
+            if(estudentVerificar == null){
+                throw new IllegalArgumentException("El estudiante no existe");
+            }
+                estudentRepository.delete(id);
         }
     }
 

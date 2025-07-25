@@ -65,6 +65,7 @@ public class EstudentCrudRepositoryImpl implements CrudRepository<Estudent>{
         try(PreparedStatement pst = conn.prepareStatement
                 ("UPDATE estudiantes SET nombre=?, apellidos=?, edad=?, sexo=?, telefono=?, correo=? WHERE id=?")){
             createEstudent(estudent, pst);
+            pst.setLong(7, estudent.getId());
             pst.executeUpdate();
         }
     }
