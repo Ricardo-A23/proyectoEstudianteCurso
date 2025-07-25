@@ -4,6 +4,7 @@ import com.proyecto.estudiante.curso.ejemplo.models.Course;
 import com.proyecto.estudiante.curso.ejemplo.models.Estudent;
 import com.proyecto.estudiante.curso.ejemplo.models.EstudentCourse;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface EstudentCourseRepository {
     void update(Long idEstudiante, Long idCurso, Long idCursoNuevo) throws SQLException;
 
     boolean existsByEstudentAndCurso(Long idEstudiante, Long idCurso) throws SQLException;
+
+    void setConn(Connection conn) throws SQLException;
 }
