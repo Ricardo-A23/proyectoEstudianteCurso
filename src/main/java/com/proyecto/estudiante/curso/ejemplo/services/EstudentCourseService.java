@@ -5,6 +5,7 @@ import com.proyecto.estudiante.curso.ejemplo.models.Estudent;
 import com.proyecto.estudiante.curso.ejemplo.models.EstudentCourse;
 import com.proyecto.estudiante.curso.ejemplo.repository.CrudRepository;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface EstudentCourseService {
     List<Course> findCourseByStudentId(Long id)throws SQLException;
 
     boolean existsByEstudentAndCurso(Long idEstudiante, Long idCurso) throws SQLException;
+
+
 }
