@@ -1,6 +1,7 @@
 package com.proyecto.estudiante.curso.ejemplo.services.impl;
 
 import com.proyecto.estudiante.curso.ejemplo.models.Estudent;
+import com.proyecto.estudiante.curso.ejemplo.repository.CrudRepository;
 import com.proyecto.estudiante.curso.ejemplo.repository.impl.EstudentCrudRepositoryImpl;
 import com.proyecto.estudiante.curso.ejemplo.services.CrudService;
 import com.proyecto.estudiante.curso.ejemplo.util.ConnectionBd;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class EstudentCrudServiceImpl implements CrudService<Estudent> {
 
-    private EstudentCrudRepositoryImpl estudentRepository;
+    private CrudRepository<Estudent> estudentRepository;
 
     public EstudentCrudServiceImpl(EstudentCrudRepositoryImpl estudentRepository) {
         this.estudentRepository = estudentRepository;

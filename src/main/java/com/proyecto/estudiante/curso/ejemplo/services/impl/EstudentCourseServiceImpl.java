@@ -5,6 +5,7 @@ import com.proyecto.estudiante.curso.ejemplo.models.Estudent;
 import com.proyecto.estudiante.curso.ejemplo.models.EstudentCourse;
 import com.proyecto.estudiante.curso.ejemplo.repository.CrudRepository;
 import com.proyecto.estudiante.curso.ejemplo.repository.EstudentCourseRepository;
+import com.proyecto.estudiante.curso.ejemplo.repository.impl.CourseCrudRepositoryImpl;
 import com.proyecto.estudiante.curso.ejemplo.repository.impl.EstudentCourseRepositoryImpl;
 import com.proyecto.estudiante.curso.ejemplo.repository.impl.EstudentCrudRepositoryImpl;
 import com.proyecto.estudiante.curso.ejemplo.services.EstudentCourseService;
@@ -16,14 +17,16 @@ import java.util.List;
 
 public class EstudentCourseServiceImpl implements EstudentCourseService {
 
-    private EstudentCourseRepositoryImpl estudentCourseRepository;
-    private EstudentCrudRepositoryImpl estudentCrudRepository;
+    private EstudentCourseRepository estudentCourseRepository;
+    private CrudRepository<Estudent>  estudentCrudRepository;
+    private CrudRepository<Course> courseCrudRepository;
 
-    public EstudentCourseServiceImpl(EstudentCourseRepositoryImpl estudentCourseRepository, EstudentCrudRepositoryImpl estudentCrudRepository) {
+    public EstudentCourseServiceImpl(EstudentCourseRepositoryImpl  estudentCourseRepository,
+            EstudentCrudRepositoryImpl estudentCrudRepository, CourseCrudRepositoryImpl  courseCrudRepository) {
         this.estudentCourseRepository = estudentCourseRepository;
         this.estudentCrudRepository = estudentCrudRepository;
+        this.courseCrudRepository = courseCrudRepository;
     }
-
 
     @Override
     public List<EstudentCourse> getAll() throws SQLException {
@@ -42,6 +45,12 @@ public class EstudentCourseServiceImpl implements EstudentCourseService {
 
         try(Connection conn = ConnectionBd.getConnection()){
             estudentCourseRepository.setConn(conn);
+            courseCrudRepository.setConn(conn);
+
+            Course buscarCurso = courseCrudRepository.getById(id);
+            if(buscarCurso == null){
+                throw new IllegalArgumentException("El curso no existe");
+            }
             return estudentCourseRepository.findEstudentByCourseId(id);
         }
     }
@@ -102,9 +111,17 @@ public class EstudentCourseServiceImpl implements EstudentCourseService {
             if (conn.getAutoCommit()) {
                 conn.setAutoCommit(false);
             }
-            Estudent e = estudentCrudRepository.getById(idEstudiante);
-            if (e == null) {
+            Estudent estudiante = estudentCrudRepository.getById(idEstudiante);
+            Course curso =  courseCrudRepository.getById(idCurso);
+            Course cursoNuevo = courseCrudRepository.getById(idCursoNuevo);
+            if (estudiante == null) {
                 throw new IllegalArgumentException("El estudiante no existe");
+            }
+            if(curso == null){
+                throw new IllegalArgumentException("El curso no existe");
+            }
+            if(cursoNuevo == null){
+                throw new IllegalArgumentException("El curso con el id " + idCursoNuevo + " no existe");
             }
             if(estudentCourseRepository.existsByEstudentAndCurso(idEstudiante, idCursoNuevo)) {
                 throw new IllegalArgumentException("El estudiante ya existe en el curso");
