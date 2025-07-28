@@ -88,10 +88,7 @@ public class MenuCurso {
         }
         curso.setId(sc.nextLong());
         System.out.println("Ingres el nombre nuevo del curso");
-        while(!sc.hasNextLine()){
-            System.out.println("Debe ingresar un nombre valido");
-            sc.nextLine();
-        }
+        sc.nextLine();
         curso.setNombre(sc.nextLine());
         try {
             courseCrudService.update(curso);
